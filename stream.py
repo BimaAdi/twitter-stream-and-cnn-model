@@ -32,7 +32,7 @@ class listener(StreamListener):
                 time.sleep(5)
                 pass
 
-        with open(self.directory + self.begin +' - ' + time.asctime( time.localtime(time.time()) ), 'w') as f:
+        with open(self.directory + "/" + self.begin +' - ' + time.asctime( time.localtime(time.time()) ), 'w') as f:
             for item in self.tweet_data:
                 item = item.replace('\n','')
                 f.write("%s\n" % item)
