@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CNN Twitter</title>
+</head>
+<body>
+    <h1>On Stream</h1>
+    <form action="http://localhost:5000/start_stream" method="POST">
+        <label for="">Stream setiap</label>
+        <input type="number" name="menit" id="">
+        <label>menit</label>
+        <button type="submit">start stream</button>
+    </form>
+
+    <h1>Raw</h1>
+    <ul>
+    {% for item in raw_file %}
+        <li>
+            {{ item }}
+            <a href="http://localhost:5000/download/{{ item }}">Download</a>
+            <a href="http://localhost:5000/predict/{{ item }}">Predict</a>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h1>Predict</h1>
+    <ul>
+    {% for item in predict_file %}
+        <li>
+            {{ item }}
+            <a href="#">Download</a>
+            <a href="#">Predict</a>
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
