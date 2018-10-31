@@ -4,38 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>CNN Twitter</title>
+    <link href="static/semantic.min.css" rel="stylesheet">
+    <title>Sentiment Analysis</title>
 </head>
 <body>
-    <h1>On Stream</h1>
-    <form action="http://localhost:5000/start_stream" method="POST">
-        <label for="">Stream setiap</label>
-        <input type="number" name="menit" id="">
-        <label>menit</label>
-        <button type="submit">start stream</button>
-    </form>
+    <div class="ui container secondary pointing menu">
+        <a class="active item" href="http://localhost:5000/">
+            Stream
+        </a>
+        <a class="item" href="http://localhost:5000/predict">
+            Predict
+        </a>
+    </div>
 
-    <h1>Raw</h1>
-    <ul>
-    {% for item in raw_file %}
-        <li>
-            {{ item }}
-            <a href="http://localhost:5000/download/raw/{{ item }}">Download</a>
-            <a href="http://localhost:5000/predict/{{ item }}">Predict</a>
-        </li>
-    {% endfor %}
-    </ul>
+    <div class="ui container">
+        <h1>Stream</h1>
+    </div>
 
-    <hr>
+    <div class="ui container form">
+        {% if is_stream_run %}
+        <form class="inline fields" action="http://localhost:5000/stop_stream" method="GET">
+            <div class="twelve wide field">
+                <button type="submit">stop stream</button>
+            </div>
+        </form>
+        {% else %}
+        <form class="inline fields" action="http://localhost:5000/start_stream" method="POST">
+            <!-- <div class="twelve wide field"> -->
+                <label>Stream setiap</label>
+                <input type="number" name="menit" id="">
+                <label>menit</label>
+                <button type="submit">start stream</button>
+            <!-- </div> -->
+        </form>
+        {% endif %}
+    </div>
 
-    <h1>Predict</h1>
-    <ul>
-    {% for item in predict_file %}
-        <li>
-            {{ item }}
-            <a href="http://localhost:5000/download/predict/{{ item }}">Download</a>
-        </li>
-    {% endfor %}
-    </ul>
+    <div class="ui container relaxed divided list">
+        {% for item in raw_file %}
+        <div class="item">
+            <div class="ui content grid">
+                <div class="fourteen wide column description">{{ item }}.txt</div>
+                <div class="one wide column">
+                    <a class="header" href="http://localhost:5000/predict_txt/{{ item }}">Predict</a>
+                </div>
+                <div class="one wide column">
+                    <a class="header" href="http://localhost:5000/download/raw/{{ item }}">Download</a>
+                </div>      
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script src="static/semantic.min.js"></script>
 </body>
 </html>

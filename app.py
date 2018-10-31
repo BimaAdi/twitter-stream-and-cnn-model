@@ -22,14 +22,24 @@ cron = CronTab(user=curr_username)
 cron.remove_all()
 cron.write()
 
+#-------------------- ROUTE ---------------------------------------------------
 # index route
 @app.route("/")
 def index():
     raw_file = os.listdir(raw_file_directory)
-    predict_file = os.listdir(predict_file_directory)
-    return render_template('index.html', raw_file=raw_file, predict_file=predict_file)
+    if(len(cron) > 0):
+        is_stream_run = True
+    else:
+        is_stream_run = False
+    return render_template('index.html', raw_file=raw_file, is_stream_run=is_stream_run)
 
-# twitter stream route
+# predict route
+@app.route("/predict")
+def predict():
+    predict_file = os.listdir(predict_file_directory)
+    return render_template('predict.html', predict_file=predict_file)
+
+# twitter start stream route
 @app.route("/start_stream", methods=["GET", "POST"])
 def start_stream():
     params = request.form
@@ -53,6 +63,13 @@ def start_stream():
     
     return redirect(url_for('index'))
 
+# twitter stop stream route
+@app.route("/stop_stream")
+def stop_stream():
+    cron.remove_all()
+    cron.write()
+    return redirect(url_for('index'))
+
 # Download file route
 @app.route("/download/<directory>/<filename>")
 def download(directory, filename):
@@ -62,8 +79,8 @@ def download(directory, filename):
         return(send_file(dir_aplikasi + "/" + predict_file_directory + "/" +filename))
 
 # Predict route using CNN Model
-@app.route("/predict/<filename>")
-def predict(filename):
+@app.route("/predict_txt/<filename>")
+def predict_txt(filename):
     input_file = open(raw_file_directory + "/" + filename)
     csv_head = ['text', 'conclusi', 'percent']
     csv_body = []
@@ -77,6 +94,8 @@ def predict(filename):
         csv_body.append(csv_line)
     
     input_file.close()
+    # os.remove(raw_file_directory + "/" + filename)
+
     csv_name = filename + ".csv"
     try:
         with open(predict_file_directory + "/" + csv_name, 'w') as csv_name:
@@ -86,4 +105,4 @@ def predict(filename):
                 writer.writerow(data)
     except IOError:
             print("I/O error")
-    return redirect(url_for('index'))
+    return redirect(url_for('predict'))
