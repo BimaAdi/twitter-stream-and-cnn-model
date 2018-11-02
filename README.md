@@ -8,7 +8,7 @@ python -m venv aplikasi
 ```
 4. aktivasi virtual environtment
 ```
-aplikasi\Scripts\activate.bat
+aplikasi\Scripts\activate.sh
 ```
 5. install package yang dibutuhkan aplikasi
 ```
